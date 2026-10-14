@@ -22,4 +22,4 @@ issuer's go into `allowedHosts`.
 
 ## License
 
-MIT
+MIT, see [LICENSE](LICENSE).
