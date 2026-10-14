@@ -1,0 +1,25 @@
+{
+    "name": "neos/mcp",
+    "type": "neos-package",
+    "description": "Serves the operations of neos/openapi APIs, preconfigured for the Neos API, as MCP tools authorized by Neos.OAuth",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "neos/flow": "^9.0",
+        "neos/oauth": "@dev",
+        "neos/openapi-flowadapter": "dev-main",
+        "neos/openapi-mcp": "@dev",
+        "guzzlehttp/psr7": "^2.4",
+        "neos/api": "@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Neos\\Mcp\\": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Neos.Mcp"
+        }
+    }
+}

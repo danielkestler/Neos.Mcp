@@ -1,0 +1,57 @@
+Neos:
+  Mcp:
+    # The MCP servers, by name. Each one offers the operations of neos/openapi APIs as tools, over the Streamable HTTP
+    # transport of MCP 2026-07-28 (stateless). A server is removed by setting it to ~
+    servers:
+      # The Neos API (Neos.Api) at /mcp
+      neos:
+        # the endpoint, relative to the base URI
+        uriPrefix: 'mcp'
+        # optional: defaults to the server's key
+        name: 'Neos'
+        version: '1.0.0'
+        # optional: for the model
+        instructions: ~
+        # names from Neos.OpenApi.FlowAdapter.apis
+        apis:
+          'neos': true
+        # optional: by OpenAPI tag, include empty for all
+        tags:
+          include: []
+          exclude: []
+        # PSR-15 middlewares around each operation call, e.g. to turn exceptions into problem responses, by key
+        operationMiddlewares:
+          'Neos.Api:oauthChallenge': 'Neos\Api\Infrastructure\Http\OAuthChallengeMiddleware'
+        # The key of the server in Neos.OAuth.protectedResources (below): requests need an access token for it, and
+        # get a 401 pointing to its metadata otherwise
+        protectedResource: 'Neos.Mcp:Neos'
+        # Hosts the Origin header (or, without one, the Host header) may name, against DNS rebinding. The issuer's
+        # host is always allowed
+        allowedHosts: ['localhost', '127.0.0.1', '[::1]']
+
+  OAuth:
+    protectedResources:
+      # The neos server above. Its path is the server's uriPrefix, and it only accepts tokens bound to it (RFC 8707)
+      'Neos.Mcp:Neos':
+        path: 'mcp'
+        name: 'Neos MCP server'
+        scopeProvider: 'Neos\Api\Security\PrivilegeScopes'
+        requireAudience: true
+
+  Flow:
+    mvc:
+      routes:
+        'Neos.Mcp':
+          # ahead of catch-all routes such as the Neos frontend's
+          position: start
+          providerFactory: Neos\Mcp\Routing\McpRoutesProviderFactory
+    security:
+      authentication:
+        providers:
+          'Neos.OAuth:Bearer':
+            requestPatterns:
+              # every server's endpoint
+              'Neos.Mcp:Neos':
+                pattern: 'Uri'
+                patternOptions:
+                  uriPattern: '/mcp'
