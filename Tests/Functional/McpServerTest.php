@@ -62,6 +62,7 @@ class McpServerTest extends EndpointTestCase
         self::assertSame([self::PROTOCOL_VERSION], $result['supportedVersions']);
         self::assertSame(['tools' => []], $result['capabilities']);
         self::assertSame('neos', $result['_meta']['io.modelcontextprotocol/serverInfo']['name']);
+        self::assertStringContainsString('Never change "live" directly', $result['instructions'] ?? '');
     }
 
     #[Test]

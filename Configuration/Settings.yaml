@@ -10,8 +10,28 @@ Neos:
         # optional: defaults to the server's key
         name: 'Neos'
         version: '1.0.0'
-        # optional: for the model
-        instructions: ~
+        # optional: for the model, sent with the server's description
+        instructions: |
+          Neos is a content management system. Content lives in content repositories (usually "default") as nodes:
+          documents (pages) with content below them, in workspaces and dimension space points (e.g. languages).
+
+          Reading
+          - Start with listSites, then listNodes or getNode. getNodeType tells a node type's properties.
+          - workspaceName defaults to "live" (the published website). dimensionSpacePoint is a JSON string such as
+            {"language":"en_US"} and defaults to the site's default.
+          - Use include (e.g. "children,references") instead of one call per node.
+          - Page with offset and limit. Don't follow the URLs in links: they belong to the REST API, not to this server.
+
+          Changing content
+          - Never change "live" directly. Work in the user's personal workspace (listWorkspaces shows it; create it with
+            createWorkspace if there is none) or a shared one they name.
+          - Show what changed with listWorkspaceChanges. Call publishWorkspace only when the user asks to publish.
+          - A node with isShineThrough shows another language's content: create a variant with createNodeVariant first.
+
+          Ask before calling discardWorkspace, deleteNode, deleteSite, deleteUser, deleteWorkspace or flushCaches.
+
+          Errors are problem documents. 404 also means you may not see something, 403 that the account lacks the
+          right, 422 and 409 explain what to fix in their detail.
         # names from Neos.OpenApi.FlowAdapter.apis
         apis:
           'neos': true
