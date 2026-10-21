@@ -20,6 +20,6 @@ class ToolCatalogTest extends FunctionalTestCase
 
         // multipart uploads, whose body the document doesn't describe
         self::assertSame(['createAsset', 'replaceAssetFile'], array_keys($catalog->skipped));
-        self::assertCount(83, $catalog);
+        self::assertCount(85, $catalog);
     }
 }
